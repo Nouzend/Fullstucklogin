@@ -4,14 +4,14 @@ const jwt = require("jsonwebtoken");
 const { JWT_SECRET, JWT_EXPIRE_TIMEOUT } = require("../config/constants");
 
 const register = async (req, res) => {
-  const username = req.body.username;
+  const Email = req.body.Email;
   const password = req.body.password;
   const firstName = req.body.firstname;
   const lastName = req.body.lastname;
 
   const user = await connection.query(
-    "SELECT * FROM users WHERE username = ?",
-    [username]
+    "SELECT * FROM test.Customer WHERE Email = ?",
+    [Email]
   );
 
   if (user[0].length > 0) {
@@ -20,19 +20,19 @@ const register = async (req, res) => {
 
   const hashedPwd = await bcrypt.hash(password, 10);
   await connection.query(
-    "INSERT INTO users (username, password, first_name, last_name, role) VALUES (?, ?, ?, ?, 'user')",
-    [username, hashedPwd, firstName, lastName]
+    "INSERT INTO users (username, password, role) VALUES (?, ?, 'user')",
+    [Email, hashedPwd]
   );
   res.status(200).send("Register successful.");
 };
 
 const login = async (req, res) => {
-  const username = req.body.username;
+  const Email = req.body.Email;
   const password = req.body.password;
 
   const [users] = await connection.query(
-    "SELECT * FROM users WHERE username = ?",
-    [username]
+    "SELECT * FROM test.Customer WHERE Email = ?",
+    [Email]
   );
 
   if (users.length === 0) {
