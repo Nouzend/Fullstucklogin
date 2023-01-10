@@ -8,7 +8,7 @@ const registerAdmin = async (req, res) => {
 
 
   const [users] = await connection.query(
-    "SELECT * FROM test WHERE username = ?",
+    "SELECT * FROM test.Customer WHERE Email = ?",
     [username]
   );
 
@@ -25,13 +25,13 @@ const registerAdmin = async (req, res) => {
 };
 
 const getAllUsers = async (req, res) => {
-  const [users] = await connection.query("SELECT * FROM users");
+  const [users] = await connection.query("SELECT * FROM test.Customer;");
   res.status(200).send(users);
 };
 
 const getUserById = async (req, res) => {
   const id = req.params.id;
-  const [users] = await connection.query("SELECT * FROM users where id = ?", [
+  const [users] = await connection.query("SELECT * FROM test.Customer where id = ?", [
     id,
   ]);
 
@@ -46,7 +46,7 @@ const updateUserById = async (req, res) => {
   const id = req.params.id;
   const firstName = req.body.firstName;
   const lastName = req.body.lastName;
-  const [users] = await connection.query("SELECT * FROM users where id = ?", [
+  const [users] = await connection.query("SELECT * FROM test.Customer where id = ?", [
     id,
   ]);
 
