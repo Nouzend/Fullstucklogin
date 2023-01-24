@@ -4,7 +4,7 @@ const { ADMIN_ROLE } = require("../config/constants");
 
 const registerAdmin = async (req, res) => {
   const Email = req.body.Email;
-  const password = req.body.password;
+  const Password = req.body.Password;
 
 
   const [users] = await connection.query(
@@ -18,7 +18,7 @@ const registerAdmin = async (req, res) => {
 
   const hashedPwd = await bcrypt.hash(password, 10);
   await connection.query(
-    "INSERT INTO test (Email, Password, role) VALUES (?, ?, ?)",
+    "INSERT INTO Customer (Email, Password, role) VALUES (?, ?, ?)",
     [Email, hashedPwd, ADMIN_ROLE]
   );
   res.status(200).send("Register successful.");
@@ -43,9 +43,8 @@ const getUserById = async (req, res) => {
 };
 
 const updateUserById = async (req, res) => {
-  const id = req.params.id;
-  const firstName = req.body.firstName;
-  const lastName = req.body.lastName;
+  const Email = req.body.Email;
+  const Password = req.body.Password;
   const [users] = await connection.query("SELECT * FROM test.Customer where id = ?", [
     id,
   ]);

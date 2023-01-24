@@ -6,8 +6,6 @@ const { JWT_SECRET, JWT_EXPIRE_TIMEOUT } = require("../config/constants");
 const register = async (req, res) => {
   const Email = req.body.Email;
   const password = req.body.password;
-  const firstName = req.body.firstname;
-  const lastName = req.body.lastname;
 
   const user = await connection.query(
     "SELECT * FROM test.Customer WHERE Email = ?",
@@ -15,20 +13,20 @@ const register = async (req, res) => {
   );
 
   if (user[0].length > 0) {
-    return res.status(400).send({ message: "Username is already taken." });
+    return res.status(400).send({ message: "Email is already taken." });
   }
 
   const hashedPwd = await bcrypt.hash(password, 10);
   await connection.query(
-    "INSERT INTO users (username, password, role) VALUES (?, ?, 'user')",
+    "INSERT INTO Customer (Email, password, role) VALUES (?, ?, 'user')",
     [Email, hashedPwd]
-  );
+  )
   res.status(200).send("Register successful.");
 };
 
 const login = async (req, res) => {
   const Email = req.body.Email;
-  const password = req.body.password;
+  const Password = req.body.Password;
 
   const [users] = await connection.query(
     "SELECT * FROM test.Customer WHERE Email = ?",
